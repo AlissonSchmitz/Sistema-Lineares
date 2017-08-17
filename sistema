@@ -1,0 +1,112 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <locale.h>
+
+void main()
+{
+setlocale(LC_ALL, "Portuguese");
+int tam, maior, linha, cont=0,mlinha=0,k,col,i,j;
+printf("Coloque o tamanho da matriz quadrada: ");
+scanf("%d", &tam);
+float matriz[tam][tam+1], conta[tam],troca, soma;
+double x[tam];
+for(i=0;i<tam;i++){
+for(j=0;j<tam+1;j++){
+scanf("%f", &matriz[i][j]);
+}
+}
+printf("\nSua matriz ficou:");
+for (i=0;i<tam;i++){
+printf("\n");
+for (j=0;j<tam+1;j++){
+if(j==tam){
+printf("= %.2f", matriz[i][j]);
+break;
+}
+printf(" x%d=%.2f ",j+1,matriz[i][j]);
+}
+}
+printf("\n");
+for (k=0; k<tam-1; k++){
+maior = 0;
+for(i=k;i<tam;i++){
+if (abs(matriz[i][k])> abs(maior)){
+maior = matriz[i][k];
+mlinha = i;
+}
+}
+for(j=k;j<tam+1;j++){
+troca = matriz[k][j];
+matriz[k][j] = matriz[mlinha][j];
+matriz[mlinha][j] = troca;
+}
+printf("\n\nSua matriz com o pivô em cima ficou:");
+for (i=0;i<tam;i++){
+printf("\n");
+for (j=0;j<tam+1;j++){
+if(j==tam){
+printf("= %.2f", matriz[i][j]);
+break;
+}
+printf(" x%d=%.2f ",j+1,matriz[i][j]);
+}
+}
+printf("\n\n");
+for(i=k+1;i<tam;i++){
+if(matriz[k][k] < 0 && matriz[i][k] > 0){
+conta[i-1] = (matriz[i][k] / (matriz[k][k](-1))); // confere pra ver se é negativo com positivo
+printf("Nova L%d = %.2f * L%d + L%d\n",i+1,conta[i-1],i,i+1);
+}
+if(matriz[k][k] < 0 && matriz[i][k] < 0){
+conta[i-1] = (matriz[i][k] / matriz[k][k](-1)); // confere pra ver se é negativo com negativo
+printf("Nova L%d = %.2f * L%d + L%d\n",i+1,conta[i-1],i,i+1);
+}
+if(matriz[k][k] > 0 && matriz[i][k] > 0){
+conta[i-1] = (matriz[i][k] / matriz[k][k](-1)); // confere pra ver se é positivo com positivo
+printf("Nova L%d = %.2f * L%d + L%d\n",i+1,conta[i-1],i,i+1);
+}
+if(matriz[k][k] > 0 && matriz[i][k] < 0){
+conta[i-1] = (matriz[i][k] / (matriz[k][k](-1))); // confere pra ver se é positivo com negativo
+printf("Nova L%d = %.2f * L%d + L%d\n",i+1,conta[i-1],i,i+1);
+}
+if(matriz[i][k] == 0){
+matriz[i][k] = 0;
+}
+}
+for(i=k+1;i<tam;i++){
+for(j=k;j<tam+1;j++){
+if(matriz[i][j] == 0){
+break;
+}
+matriz[k][j] = matriz[k][j];
+matriz[i][j] = (conta[i-1] * matriz[k][j]) + matriz[i][j];
+}
+}
+printf("\n#######################################\n");
+printf("Sua matriz modificada ficou:");
+for (i=0;i<tam;i++){
+printf("\n");
+for (j=0;j<tam+1;j++){
+if(j==tam){
+printf("= %.2f", matriz[i][j]);
+break;
+}
+printf(" x%d=%.2f ",j+1,matriz[i][j]);
+}
+}
+}
+printf("\n\nSolução: ");
+for(i=tam-1; i>=0; i--){
+for(j=tam-1; j>=0; j--){
+if(j == i){
+x[i] = (matriz[j][tam] / matriz[i][j]);
+break;
+}
+matriz[i][j] = matriz[i][j] * x[j];
+matriz[i][tam] = (matriz[i][j]*(-1)) + matriz[i][tam];
+}
+printf("\nx%d=%.2f",i+1, x[i]);
+}
+printf("\n\n");
+}
